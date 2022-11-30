@@ -28,9 +28,9 @@ void insert(struct node *head, int ele){
     struct node *newnode = (struct node*)malloc(sizeof(struct node));
 
     newnode->data = ele;
-    newnode->next = (struct node*)((uintptr_t)(curr) ^ NULL);
+    newnode->next = (struct node*)(XOR(curr, NULL));
 
-    curr->next = (struct node*)((uintptr_t)(curr->next) ^ (uintptr_t)(prev) ^ NULL);
+    curr->next = (struct node*)(XOR(XOR((curr->next),(prev)), NULL));
 }
 
 void insertpos(struct node *head, int pos, int ele){
@@ -47,10 +47,10 @@ void insertpos(struct node *head, int pos, int ele){
 
     struct node *newnode = (struct node*)malloc(sizeof(struct node));
     newnode->data = ele;
-    newnode->next = (struct node*)((uintptr_t)(prev) ^ (uintptr_t)(curr));
+    newnode->next = (struct node*)(XOR(prev,curr));
 
-    prev->next = (struct node*)((uintptr_t)(prev->next) ^ (uintptr_t)(newnode) ^ (uintptr_t)(curr));
-    curr->next = (struct node*)((uintptr_t)(curr->next) ^ (uintptr_t)(newnode) ^ (uintptr_t)(prev));
+    prev->next = (struct node*)XOR(XOR(prev->next,newnode),curr);
+    curr->next = (struct node*)XOR(XOR(curr->next, newnode), prev);
 }
 
 int deleteEnd(struct node *head){
@@ -58,13 +58,13 @@ int deleteEnd(struct node *head){
 
     struct node *prev = NULL, *temp = NULL;
 
-    while(curr->next != (struct node*)(uintptr_t)(prev) ^ NULL){
+    while(curr->next != (struct node*)XOR(prev, NULL){
         temp = curr;
-        curr = (struct node*)((uintptr_t)(curr->next) ^ (uintptr_t)(prev));
+        curr = (struct node*)XOR(curr->nextprev);
         prev = temp;
     }
 
-    prev->next= (struct node*)((uintptr_t)(prev->next) ^ (uintptr_t)(curr) ^ NULL);
+    prev->next= (struct node*)XOR(XOR(prev->next, curr), NULL));
     free(curr);
 }
 
@@ -75,17 +75,17 @@ int deletepos(struct node* head, 3){
     int count = 1;
     while(count < pos){
         temp = curr;
-        curr = (struct node*)((uintptr_t)(curr->next) ^ (uintptr_t)(prev));
+        curr = (struct node*)XOR(curr->next, prev);
         prev = temp;
         count++;
     }
     printf("deleting the value %d", &curr->data);
     struct node *nextnode;
 
-    nextnode = (struct node*)((uintptr_t)(curr->next) ^ (uintptr_t)(prev));
+    nextnode = (struct node*)XOR(curr->next, prev);
 
-    nextnode->next = (struct node*)((uintptr_t)(newnode->next) ^ (uintptr_t)(curr) ^ (uintptr_t)(prev));
-    prev->next = (struct node*)((uintptr_t)(prev->next) ^ (uintptr_t)(curr) ^ (uintptr_t)(prev));
+    nextnode->next = (struct node*)XOR(XOR(newnode->next,curr), prev);
+    prev->next = (struct node*)XOR(XOR(prev->next, curr), prev);
 }
 
 struct node *create(int ele){
@@ -101,10 +101,10 @@ void display(struct node *head){
 
     struct node *prev = NULL, *temp = NULL;
 
-    while(curr->next != (struct node*)((uintptr_t)(prev) ^ NULL)){
+    while(curr->next != (struct node*)XOR(prev, NULL){
         printf("%d ", curr->data);
         temp = curr;
-        curr = (struct node*)((uintptr_t)(curr->next) ^ (uintptr_t)(prev));
+        curr = (struct node*)XOR(curr->next, prev);
         prev = temp;
     }
 }
